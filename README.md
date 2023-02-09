@@ -35,3 +35,33 @@ Hapus semua konfigurasi dan ganti dengan [smb.conf](https://raw.githubuserconten
 `curl https://raw.githubusercontent.com/shinyxn/PS2SMB-Termux/main/smb.conf > /etc/samba/smb.conf`
 <br><br><b>Notes:</b>
 - Port yang digunakan nantinya adalah 1139, sebenarnya default port SMB pada Windows/Linux adalah 445, namun untuk dapat menggunakan port <1024 pada Android harus mempunyai akses root
+- File smb.conf yang saya sediakan sudah dikonfigurasi supaya dapat terhubung ke OPL PS2, jujur agak tricky sih untuk koneksikan SMB Server Android via Termux ke PS2, bahkan sampai menggunakan environment proot-distro karena selalu gagal ketika menggunakan samba pada environment termux walaupun sudah merubah smb.conf sedemikian rupa
+6. Langkah terakhir, ketikkan
+- `testparm` <br>lalu restart samba service menggunakan
+- `service smbd restart`
+
+## Koneksi ke PS2
+Hubungkan PS2 ke router menggunakan kabel LAN, pastikan Android terhubung ke jaringan yang sama melalui koneksi Wifi.
+<br><br>Selanjutnya, cek IP Android menggunakan perintah
+- `ifconfig`
+![ifconfig](docs/IMG_20230210_000336.png)
+<br>
+Lalu konfigurasi Network Settings pada OPL sebagai berikut<br>
+
+<br><b>-SMB Server-<br>
+Address type : IP<br>
+Address : Sesuai IP Android<br>
+Port : 1139<br>
+Share : PS2SMB<br>
+User: guest<br>
+Password:</b>
+
+## Penggunaan
+Setelah selesai instalasi dan konfigurasi pertama kali, lalu bagaimana cara menjalankan server smb ini lagi selanjutnya?
+Pertama masuk ke session ubuntu dan jalankan service smbd
+- `proot-distro login ubuntu --bind /storage/emulated/0/PS2SMB:/media/PS2SMB`
+- `service smbd start`
+
+## Troubleshooting
+Apabila telah selesai mengkonfigurasi samba, jangan lupa untuk merestart service SMB menggunakan 
+- `service smbd restart`
